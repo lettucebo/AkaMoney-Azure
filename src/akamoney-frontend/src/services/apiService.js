@@ -53,7 +53,7 @@ export const shortUrlService = {
    * @returns {Promise} Promise resolving to the generated code
    */
   generateRandomCode: async (length = 6) => {
-    const response = await api.get(`/shorturl/generate-code${length !== 6 ? `?length=${length}` : ''}`);
+    const response = await api.get(`/shorturl/generate`);
     return response.data;
   },
 
@@ -118,7 +118,7 @@ export const clickTrackingService = {
    * @returns {Promise} Promise resolving to statistics object
    */
   getClickStatistics: async () => {
-    const response = await api.get('/clicks/statistics');
+    const response = await api.get('/clicks/stats');
     return response.data;
   }
 };

@@ -1,11 +1,19 @@
 # AkaMoney 🔗
 
-AkaMoney is a high-performance short URL service. Now fully supports Microsoft Entra ID authentication for both frontend and backend.
+AkaMoney is a high-performance short URL service built on **Cloudflare's edge network**. Features Microsoft Entra ID authentication for secure management.
 
-## Authentication (2025-06-04 Update)
-- Frontend authentication now only supports Microsoft Entra ID (MSAL.js)，mock/development login is no longer available.
-- Backend (AkaMoney.Functions) enforces Entra ID JWT authentication for all API endpoints.
-- Please configure `.env.example` (frontend) and `local.settings.json` (backend) with your Entra ID Application (clientId, tenantId, api scope) for both local and production environments.
+## 🌐 Architecture
+
+AkaMoney runs entirely on Cloudflare's free tier:
+
+- **Cloudflare Workers** - API & redirect service (100K requests/day free)
+- **Cloudflare KV** - Short URL storage (100K reads/day free)
+- **Cloudflare D1** - Click tracking database (5M rows read/day free)
+- **Cloudflare Pages** - Vue 3 frontend (unlimited requests free)
+
+## Authentication
+- Frontend: Microsoft Entra ID via MSAL.js
+- Backend: JWT verification in Workers
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -19,32 +27,39 @@ AkaMoney is a high-performance short URL service. Now fully supports Microsoft E
 - 📅 Support for short URL expiration settings
 - 🖼️ Support for social media sharing titles, descriptions, and images
 - 🔍 Automatic management of short URL case sensitivity issues
+- ⚡ Global edge deployment with ultra-low latency
 
 ## 🏗️ System Architecture
 
-AkaMoney adopts a three-component architecture:
-
-1. **Redirect Service** - An independent microservice based on Azure Functions, handling short URL redirect requests
-2. **Management API** - A backend API based on Azure Functions, handling short URL management functions
-3. **Management Frontend** - A Vue 3 single-page application serving as the management interface
-
-![Architecture Diagram](docs/images/architecture.png)
+```
+┌─────────────────────────────────────────────────────────────┐
+│                  Cloudflare Edge Network                    │
+├─────────────────────────────────────────────────────────────┤
+│  ┌──────────────────┐     ┌──────────────────────────────┐  │
+│  │  Cloudflare Pages│     │    Cloudflare Workers        │  │
+│  │  (Vue 3 SPA)     │────▶│  - /api/shorturl/*           │  │
+│  │                  │     │  - /api/clicks/*             │  │
+│  └──────────────────┘     │  - /:code (redirect)         │  │
+│                           └──────────────────────────────┘  │
+│                                  │           │              │
+│                                  ▼           ▼              │
+│                           ┌──────────┐ ┌──────────┐         │
+│                           │    KV    │ │    D1    │         │
+│                           │(shorturls)│ │(clickinfo)│        │
+│                           └──────────┘ └──────────┘         │
+└─────────────────────────────────────────────────────────────┘
+```
 
 ## 🚀 Quick Start
 
-### Environment Requirements
+### Prerequisites
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
-- [Node.js](https://nodejs.org/) (>= 16.x)
-- [Vue CLI](https://cli.vuejs.org/)
-- [Azure Functions Core Tools](https://docs.microsoft.com/azure/azure-functions/functions-run-local)
-- [Azure Subscription](https://azure.microsoft.com/free/)
+- [Node.js](https://nodejs.org/) (>= 18.x)
+- [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/)
+- Cloudflare account (free tier is sufficient)
+- Azure Entra ID application (for authentication)
 
-### Local Development Setup
-
-#### Method 1: Using the One-Click Startup Script (Recommended)
-
-We provide a one-click startup script that can automatically start all necessary services:
+### Local Development
 
 1. Clone the repository
 ```bash
@@ -52,107 +67,121 @@ git clone https://github.com/lettucebo/AkaMoney.git
 cd AkaMoney
 ```
 
-2. Ensure the following necessary tools are installed:
-   - Visual Studio Code and its Azurite extension
-   - Node.js and NPM
-   - Azure Functions Core Tools
-
-3. Configure `local.settings.json` (in `src/AkaMoney.Functions` and `src/AkaMoney.Redirect`), as shown in Method 2 below
-
-4. Run the startup script
-```powershell
-.\start-akamoney.ps1
-```
-
-5. The script will automatically check dependencies, install necessary frontend packages, and start all services:
-   - Azurite Storage Emulator (ports 10000, 10001, 10002)
-   - AkaMoney.Functions API (port 7071)
-   - AkaMoney.Redirect service (port 7072)
-   - Frontend application (port 8080)
-
-#### Method 2: Manually Starting Each Service
-
-If you want manual control over starting each service, refer to the following steps:
-
-1. Clone the repository
+2. Install dependencies
 ```bash
-git clone https://github.com/lettucebo/AkaMoney.git
-cd AkaMoney
+cd cloudflare/worker && npm install
+cd ../../src/akamoney-frontend && npm install
 ```
 
-2. Create Table Storage in Azure Storage Emulator or Azure Storage Account
-   - Table names: `shorturls` and `clickinfo`
-
-3. Configure `local.settings.json` (in `src/AkaMoney.Functions` and `src/AkaMoney.Redirect`)
-```json
-{
-  "IsEncrypted": false,
-  "Values": {
-    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
-    "TableStorageConnection": "UseDevelopmentStorage=true",
-    "DefaultRedirectUrl": "https://www.example.com",
-    "AzureAd:Instance": "https://login.microsoftonline.com/",
-    "AzureAd:TenantId": "your-tenant-id",
-    "AzureAd:ClientId": "your-client-id"
-  }
-}
-```
-
-4. Start VS Code's Azurite extension
-   - In VS Code, press F1, type "Azurite: Start", and execute this command
-
-5. Start the API project
+3. Configure environment variables
 ```bash
-cd src/AkaMoney.Functions
-func start
+# Workers API
+cp cloudflare/worker/.dev.vars.example cloudflare/worker/.dev.vars
+# Edit .dev.vars with your Entra ID credentials
+
+# Frontend
+cp src/akamoney-frontend/.env.example src/akamoney-frontend/.env.local
+# Edit .env.local with your settings
 ```
 
-6. In another terminal window, start the redirect service
+4. Initialize D1 database
 ```bash
-cd src/AkaMoney.Redirect
-func start
+cd cloudflare/worker
+npm run db:migrate
 ```
 
-7. Configure frontend environment variables (`.env.local` in `src/akamoney-frontend`)
-```
-VUE_APP_API_URL=http://localhost:7071/api
-VUE_APP_REDIRECT_URL=http://localhost:7072
-VUE_APP_AUTH_CLIENT_ID=your-client-id
-VUE_APP_AUTH_AUTHORITY=https://login.microsoftonline.com/your-tenant-id
-```
-
-8. Install dependencies and start the development server
+5. Start development servers
 ```bash
+# Option 1: Use the startup script
+cd cloudflare
+.\start-dev.ps1
+
+# Option 2: Start manually
+# Terminal 1: Workers API
+cd cloudflare/worker && npm run dev
+
+# Terminal 2: Frontend
+cd src/akamoney-frontend && npm run serve
+```
+
+6. Access the application
+   - Frontend: http://localhost:8080
+   - API: http://localhost:8787
+
+## 🚢 Deployment to Cloudflare
+
+### 1. Create Cloudflare Resources
+
+```bash
+cd cloudflare/worker
+
+# Create KV namespace
+wrangler kv:namespace create SHORTURL_KV
+wrangler kv:namespace create SHORTURL_KV --preview
+
+# Create D1 database
+wrangler d1 create akamoney-clicks
+```
+
+### 2. Update Configuration
+
+Edit `cloudflare/worker/wrangler.toml` with the resource IDs from step 1.
+
+### 3. Set Secrets
+
+```bash
+wrangler secret put AZURE_TENANT_ID
+wrangler secret put AZURE_CLIENT_ID
+```
+
+### 4. Deploy
+
+```bash
+# Deploy Workers API
+cd cloudflare/worker
+npm run db:migrate:remote
+npm run deploy
+
+# Deploy Frontend to Pages
 cd src/akamoney-frontend
-npm install
-npm run serve
+npm run pages:deploy
 ```
 
-9. The frontend will run at http://localhost:8080
+For detailed deployment instructions, see [cloudflare/README.md](cloudflare/README.md).
 
-## 🚢 Deployment to Azure
+## 📦 Tech Stack
 
-Please refer to the [Deployment Documentation](docs/deployment.md) to learn how to deploy to Azure using Azure Bicep.
-
-## 📦 Packages Used
-
-### Backend
-- .NET 8.0
-- Azure Functions v4
-- Azure.Data.Tables 12.8.3
-- Microsoft.Azure.Functions.Extensions 1.1.0
-- Microsoft.Azure.WebJobs.Extensions.OpenApi 1.5.1
-- Microsoft.Extensions.DependencyInjection 8.0.0
-- Microsoft.Identity.Web 2.15.3
+### Backend (Cloudflare Workers)
+- TypeScript
+- Hono (web framework)
+- jose (JWT verification)
+- Cloudflare KV (key-value storage)
+- Cloudflare D1 (SQLite database)
 
 ### Frontend
 - Vue 3.3.x
-- Vue Router 4.2.x
+- Vue Router 4.x
 - Bootstrap 5.3.x
-- Axios 1.6.x
+- Axios 1.x
 - @azure/msal-browser 3.6.0
-- Font Awesome 6.5.0
+- Font Awesome 6.x
+
+## 🆓 Free Tier Limits
+
+| Service | Free Limit |
+|---------|------------|
+| Workers Requests | 100,000/day |
+| KV Reads | 100,000/day |
+| KV Writes | 1,000/day |
+| KV Storage | 1 GB |
+| D1 Rows Read | 5M/day |
+| D1 Rows Written | 100K/day |
+| D1 Storage | 5 GB |
+| Pages | Unlimited |
+
+## 🗂️ Legacy Azure Version
+
+The original Azure-based implementation (Azure Functions + Table Storage) is preserved in the `src/AkaMoney.Functions` and `src/AkaMoney.Services` directories for reference.
 
 ## 🤝 Contributing
 

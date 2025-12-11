@@ -1,0 +1,28 @@
+name = "akamoney-api"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+
+# Workers Free plan limits
+# - 100,000 requests/day
+# - 10ms CPU time per invocation
+
+[vars]
+# Azure Entra ID configuration (override in .dev.vars for local development)
+AZURE_TENANT_ID = ""
+AZURE_CLIENT_ID = ""
+
+# KV Namespace for short URLs
+[[kv_namespaces]]
+binding = "SHORTURL_KV"
+id = ""  # Set after creating namespace: wrangler kv:namespace create SHORTURL_KV
+preview_id = ""  # Set after creating preview namespace: wrangler kv:namespace create SHORTURL_KV --preview
+
+# D1 Database for click tracking
+[[d1_databases]]
+binding = "CLICKS_DB"
+database_name = "akamoney-clicks"
+database_id = ""  # Set after creating database: wrangler d1 create akamoney-clicks
+
+[dev]
+port = 8787
+local_protocol = "http"

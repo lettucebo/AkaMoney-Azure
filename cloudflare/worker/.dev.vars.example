@@ -1,0 +1,6 @@
+# Copy this file to .dev.vars and fill in your values
+# These environment variables are used for local development
+
+# Azure Entra ID configuration
+AZURE_TENANT_ID=your-tenant-id
+AZURE_CLIENT_ID=your-api-client-id
