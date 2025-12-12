@@ -6,7 +6,8 @@ Short URL service built with Cloudflare Workers, KV, and D1.
 
 - Node.js 18+
 - [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/)
-- Cloudflare account
+- Cloudflare account (free tier is sufficient)
+- Azure Entra ID application (for authentication)
 
 ## Local Development
 
@@ -45,53 +46,32 @@ npm run dev
 
 The API will be available at `http://localhost:8787`.
 
-## Deployment
+---
 
-### 1. Create Cloudflare resources
+## Production Deployment
 
+For complete deployment instructions, see **[DEPLOYMENT.md](DEPLOYMENT.md)**.
+
+Quick deploy:
 ```bash
-# Create KV namespace
+# 1. Create resources (first time only)
 wrangler kv:namespace create SHORTURL_KV
-wrangler kv:namespace create SHORTURL_KV --preview
-
-# Create D1 database
 wrangler d1 create akamoney-clicks
-```
 
-### 2. Update `wrangler.toml` with resource IDs
+# 2. Update wrangler.toml with resource IDs
 
-Copy the IDs from the output of the commands above and update `wrangler.toml`:
-
-```toml
-[[kv_namespaces]]
-binding = "SHORTURL_KV"
-id = "your-kv-id"
-preview_id = "your-preview-kv-id"
-
-[[d1_databases]]
-binding = "CLICKS_DB"
-database_name = "akamoney-clicks"
-database_id = "your-d1-id"
-```
-
-### 3. Run D1 migrations (production)
-
-```bash
-npm run db:migrate:remote
-```
-
-### 4. Set environment variables
-
-```bash
+# 3. Set secrets
 wrangler secret put AZURE_TENANT_ID
 wrangler secret put AZURE_CLIENT_ID
-```
 
-### 5. Deploy
+# 4. Run migration
+wrangler d1 execute akamoney-clicks --file=../migrations/0001_create_clickinfo.sql
 
-```bash
+# 5. Deploy
 npm run deploy
 ```
+
+---
 
 ## API Endpoints
 
