@@ -49,10 +49,9 @@ export const shortUrlService = {
 
   /**
    * Generate a random short URL code
-   * @param {number} length - Optional length of the code
    * @returns {Promise} Promise resolving to the generated code
    */
-  generateRandomCode: async (length = 6) => {
+  generateRandomCode: async () => {
     const response = await api.get(`/shorturl/generate`);
     return response.data;
   },
