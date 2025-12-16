@@ -9,7 +9,7 @@ Write-Host ""
 # Get the script's directory
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $WorkerDir = Join-Path $ScriptDir "worker"
-$FrontendDir = Join-Path (Split-Path -Parent (Split-Path -Parent $ScriptDir)) "akamoney-frontend"
+$FrontendDir = Join-Path $ScriptDir "..\akamoney-frontend"
 
 # Check if wrangler is installed
 if (-not (Get-Command "wrangler" -ErrorAction SilentlyContinue)) {
