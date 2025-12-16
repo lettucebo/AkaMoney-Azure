@@ -14,7 +14,7 @@ AkaMoney is a short URL service with three-component architecture:
 - `src/AkaMoney.Functions/Program.cs` - DI setup, Entra ID auth configuration
 - `src/AkaMoney.Services/Services/ShortUrlService.cs` - Core URL operations with Table Storage
 - `src/AkaMoney.Services/Models/ShortUrlEntity.cs` - Table entity with PartitionKey="ShortUrl", RowKey=code
-- `infra/main.bicep` - Azure deployment (FlexConsumption Functions, Static Web App, Storage)
+- `src/infra/main.bicep` - Azure deployment (FlexConsumption Functions, Static Web App, Storage)
 
 ## Local Development
 ```powershell
