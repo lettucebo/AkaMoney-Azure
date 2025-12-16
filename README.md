@@ -59,6 +59,12 @@ AkaMoney runs entirely on Cloudflare's free tier:
 - Cloudflare account (free tier is sufficient)
 - Azure Entra ID application (for authentication)
 
+### Dev Container
+
+- VS Code + Docker Desktop recommended for a ready-to-use Dev Container
+- Select `Dev Containers: Reopen in Container` to build the toolchain (Dotnet 8, Azure Functions Core Tools, Node 18, Wrangler, Azurite)
+- See `docs/devcontainer.md` for details
+
 ### Local Development
 
 1. Clone the repository
