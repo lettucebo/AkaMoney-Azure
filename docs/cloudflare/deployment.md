@@ -19,8 +19,8 @@ wrangler d1 create akamoney-clicks
 
 # 3. Update wrangler.toml with resource IDs
 
-# 4. Run migration
-wrangler d1 execute akamoney-clicks --file=../migrations/0001_create_clickinfo.sql
+# 4. Run migration (use binding name CLICKS_DB)
+wrangler d1 execute CLICKS_DB --remote --file=../migrations/0001_create_clickinfo.sql
 
 # 5. Set secrets
 wrangler secret put AZURE_TENANT_ID
@@ -50,8 +50,11 @@ wrangler kv namespace list
 # List KV keys
 wrangler kv key list --namespace-id=YOUR_KV_ID
 
-# Query D1 database
-wrangler d1 execute akamoney-clicks --command="SELECT * FROM clickinfo LIMIT 10;"
+# Query D1 database (local)
+wrangler d1 execute CLICKS_DB --local --command="SELECT * FROM clickinfo LIMIT 10;"
+
+# Query D1 database (remote)
+wrangler d1 execute CLICKS_DB --remote --command="SELECT * FROM clickinfo LIMIT 10;"
 
 # Check secrets
 wrangler secret list

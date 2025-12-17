@@ -7,8 +7,8 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "tail": "wrangler tail",
-    "db:migrate": "wrangler d1 execute akamoney-clicks --local --file=../migrations/0001_create_clickinfo.sql",
-    "db:migrate:remote": "wrangler d1 execute akamoney-clicks --file=../migrations/0001_create_clickinfo.sql"
+    "db:migrate": "wrangler d1 execute CLICKS_DB --local --file=../migrations/0001_create_clickinfo.sql",
+    "db:migrate:remote": "wrangler d1 execute CLICKS_DB --remote --file=../migrations/0001_create_clickinfo.sql"
   },
   "dependencies": {
     "hono": "^4.6.0",

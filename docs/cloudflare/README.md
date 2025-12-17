@@ -65,7 +65,7 @@ wrangler secret put AZURE_TENANT_ID
 wrangler secret put AZURE_CLIENT_ID
 
 # 4. Run migration
-wrangler d1 execute akamoney-clicks --file=../migrations/0001_create_clickinfo.sql
+wrangler d1 execute CLICKS_DB --remote --file=../migrations/0001_create_clickinfo.sql
 
 # 5. Deploy
 npm run deploy
