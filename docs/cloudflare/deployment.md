@@ -1,6 +1,6 @@
 # AkaMoney Cloudflare Deployment
 
-此文件提供完整的 Cloudflare 部署說明，包含 Workers API 和 Pages 前端的部署步驟。
+This document provides complete Cloudflare deployment instructions, including deployment steps for Workers API and Pages frontend.
 
 ---
 
@@ -71,13 +71,13 @@ wrangler secret list
 
 ## Detailed Documentation
 
-完整部署說明包含：
-- Cloudflare 帳號設定
-- KV / D1 資源建立
-- Frontend 部署到 Cloudflare Pages
-- Custom Domain 設定
-- Entra ID 整合
-- GitHub Actions CI/CD 設定
-- 疑難排解指南
+The full deployment guide includes:
+- Cloudflare account setup
+- KV / D1 resource creation
+- Frontend deployment to Cloudflare Pages
+- Custom domain configuration
+- Entra ID integration
+- GitHub Actions CI/CD configuration
+- Troubleshooting guide
 
-👉 詳細內容請見本文件的完整說明
+👉 See the complete documentation in this file for detailed information.

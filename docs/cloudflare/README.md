@@ -50,7 +50,7 @@ The API will be available at `http://localhost:8787`.
 
 ## Production Deployment
 
-For complete deployment instructions, see **[DEPLOYMENT.md](DEPLOYMENT.md)**.
+For complete deployment instructions, see **[deployment.md](deployment.md)**.
 
 Quick deploy:
 ```bash
