@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## [Unreleased] Remove Cloudflare Content
+- **Breaking Change**: Removed all Cloudflare-related code and documentation. The project now exclusively uses Azure for deployment.
+- Remove: Deleted `src/cloudflare/` directory (Cloudflare Workers implementation)
+- Remove: Deleted `docs/cloudflare/` directory (Cloudflare deployment documentation)
+- Remove: Deleted root `package.json` and `package-lock.json` (contained only wrangler dependency)
+- Update: Rewrote README.md and README.zh-TW.md for Azure deployment
+- Update: Updated docs/README.md to remove Cloudflare references
+- Update: Updated docs/devcontainer.md to remove Cloudflare Workers reference
+- Update: Updated .devcontainer/devcontainer.json to remove wrangler and Cloudflare Workers port
+- Update: Removed wrangler-based deployment scripts from frontend package.json
+- **Migration Note**: For existing Cloudflare deployments, follow the Azure deployment guide in docs/infrastructure/README.md
+
 ## [Unreleased] Security Vulnerability Fix
 - Security: Fix CVE-2024-38095 (CVSS 7.5) in System.Formats.Asn1 by adding explicit reference to 8.0.1
 - Security: Fix CVE-2024-21319 (CVSS 6.8) in Microsoft.IdentityModel packages by upgrading Microsoft.Identity.Web from 2.15.3 to 4.1.1

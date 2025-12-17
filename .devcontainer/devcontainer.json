@@ -18,16 +18,15 @@
     "ASPNETCORE_ENVIRONMENT": "Development",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
   },
-  "forwardPorts": [7071, 8080, 8787, 10000, 10001, 10002],
+  "forwardPorts": [7071, 8080, 10000, 10001, 10002],
   "portsAttributes": {
     "7071": { "label": "Azure Functions" },
     "8080": { "label": "Vue Frontend" },
-    "8787": { "label": "Cloudflare Workers" },
     "10000": { "label": "Azurite Blob" },
     "10001": { "label": "Azurite Queue" },
     "10002": { "label": "Azurite Table" }
   },
-  "postCreateCommand": "npm install -g wrangler@3 azurite@3",
+  "postCreateCommand": "npm install -g azurite@3",
   "postStartCommand": "if command -v azurite >/dev/null 2>&1; then mkdir -p ${containerWorkspaceFolder}/.azurite && nohup azurite --silent --location ${containerWorkspaceFolder}/.azurite --debug ${containerWorkspaceFolder}/.azurite/debug.log >/tmp/azurite.log 2>&1 & fi",
   "customizations": {
     "vscode": {

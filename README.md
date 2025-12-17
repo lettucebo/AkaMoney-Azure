@@ -2,20 +2,19 @@
 
 *English | [繁體中文](README.zh-TW.md)*
 
-AkaMoney is a high-performance short URL service built on **Cloudflare's edge network**. Features Microsoft Entra ID authentication for secure management.
+AkaMoney is a high-performance short URL service built on **Azure**. Features Microsoft Entra ID authentication for secure management.
 
 ## 🌐 Architecture
 
-AkaMoney runs entirely on Cloudflare's free tier:
+AkaMoney runs on Azure:
 
-- **Cloudflare Workers** - API & redirect service (100K requests/day free)
-- **Cloudflare KV** - Short URL storage (100K reads/day free)
-- **Cloudflare D1** - Click tracking database (5M rows read/day free)
-- **Cloudflare Pages** - Vue 3 frontend (unlimited requests free)
+- **Azure Functions** - API & redirect service (.NET 8 isolated worker)
+- **Azure Table Storage** - Short URL and click tracking storage
+- **Azure Static Web Apps** - Vue 3 frontend hosting
 
 ## Authentication
 - Frontend: Microsoft Entra ID via MSAL.js
-- Backend: JWT verification in Workers
+- Backend: JWT verification in Azure Functions
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -29,26 +28,26 @@ AkaMoney runs entirely on Cloudflare's free tier:
 - 📅 Support for short URL expiration settings
 - 🖼️ Support for social media sharing titles, descriptions, and images
 - 🔍 Automatic management of short URL case sensitivity issues
-- ⚡ Global edge deployment with ultra-low latency
 
 ## 🏗️ System Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                  Cloudflare Edge Network                    │
+│                        Azure                                │
 ├─────────────────────────────────────────────────────────────┤
 │  ┌──────────────────┐     ┌──────────────────────────────┐  │
-│  │  Cloudflare Pages│     │    Cloudflare Workers        │  │
+│  │  Static Web Apps │     │      Azure Functions         │  │
 │  │  (Vue 3 SPA)     │────▶│  - /api/shorturl/*           │  │
 │  │                  │     │  - /api/clicks/*             │  │
 │  └──────────────────┘     │  - /:code (redirect)         │  │
 │                           └──────────────────────────────┘  │
-│                                  │           │              │
-│                                  ▼           ▼              │
-│                           ┌──────────┐ ┌──────────┐         │
-│                           │    KV    │ │    D1    │         │
-│                           │(shorturls)│ │(clickinfo)│        │
-│                           └──────────┘ └──────────┘         │
+│                                       │                     │
+│                                       ▼                     │
+│                           ┌──────────────────────┐          │
+│                           │  Azure Table Storage │          │
+│                           │  - shorturls         │          │
+│                           │  - clickinfo         │          │
+│                           └──────────────────────┘          │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -56,115 +55,66 @@ AkaMoney runs entirely on Cloudflare's free tier:
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (>= 18.x)
-- [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/)
-- Cloudflare account (free tier is sufficient)
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- [Node.js](https://nodejs.org/) (>= 16.x)
+- [Azure Functions Core Tools](https://docs.microsoft.com/azure/azure-functions/functions-run-local)
+- VS Code with Azurite extension (for local storage emulation)
 - Azure Entra ID application (for authentication)
 
 ### Dev Container
 
 - VS Code + Docker Desktop recommended for a ready-to-use Dev Container
-- Select `Dev Containers: Reopen in Container` to build the toolchain (Dotnet 8, Azure Functions Core Tools, Node 18, Wrangler, Azurite)
+- Select `Dev Containers: Reopen in Container` to build the toolchain (.NET 8, Azure Functions Core Tools, Node.js, Azurite)
 - See `docs/devcontainer.md` for details
 
 ### Local Development
 
 1. Clone the repository
 ```bash
-git clone https://github.com/lettucebo/AkaMoney.git
-cd AkaMoney
+git clone https://github.com/lettucebo/AkaMoney-Azure.git
+cd AkaMoney-Azure
 ```
 
-2. Install dependencies
-```bash
-cd src/cloudflare/worker && npm install
-cd ../akamoney-frontend && npm install
-```
+2. Start Azurite (VS Code: F1 → "Azurite: Start")
 
-3. Configure environment variables
-```bash
-# Workers API
-cp src/cloudflare/worker/.dev.vars.example src/cloudflare/worker/.dev.vars
-# Edit .dev.vars with your Entra ID credentials
-
-# Frontend
-cp src/akamoney-frontend/.env.example src/akamoney-frontend/.env.local
-# Edit .env.local with your settings
-```
-
-4. Initialize D1 database
-```bash
-cd src/cloudflare/worker
-npm run db:migrate
-```
-
-5. Start development servers
-```bash
-# Option 1: Use the startup script
-cd src/cloudflare
-.\start-dev.ps1
+3. Start development servers
+```powershell
+# Option 1: Use the startup script (recommended)
+.\start-akamoney.ps1
 
 # Option 2: Start manually
-# Terminal 1: Workers API
-cd src/cloudflare/worker && npm run dev
+# Terminal 1: Azure Functions API
+cd src/AkaMoney.Functions && func start
 
 # Terminal 2: Frontend
-cd src/akamoney-frontend && npm run serve
+cd src/akamoney-frontend && npm install && npm run serve
 ```
 
-6. Access the application
+4. Access the application
    - Frontend: http://localhost:8080
-   - API: http://localhost:8787
+   - API: http://localhost:7071
 
-## 🚢 Deployment to Cloudflare
+## 🚢 Deployment to Azure
 
-### 1. Create Cloudflare Resources
+### Using Azure Bicep
 
-```bash
-cd src/cloudflare/worker
-
-# Create KV namespace
-wrangler kv:namespace create SHORTURL_KV
-wrangler kv:namespace create SHORTURL_KV --preview
-
-# Create D1 database
-wrangler d1 create akamoney-clicks
-```
-
-### 2. Update Configuration
-
-Edit `src/cloudflare/worker/wrangler.toml` with the resource IDs from step 1.
-
-### 3. Set Secrets
+The infrastructure is defined in `src/infra/main.bicep`. Deploy using:
 
 ```bash
-wrangler secret put AZURE_TENANT_ID
-wrangler secret put AZURE_CLIENT_ID
+az deployment group create \
+  --resource-group <your-resource-group> \
+  --template-file src/infra/main.bicep \
+  --parameters environmentName=prod
 ```
 
-### 4. Deploy
-
-```bash
-# Deploy Workers API
-cd src/cloudflare/worker
-npm run db:migrate:remote
-npm run deploy
-
-# Deploy Frontend to Pages
-cd src/akamoney-frontend
-npm run pages:deploy
-```
-
-For detailed deployment instructions, see [docs/cloudflare/deployment.md](docs/cloudflare/deployment.md).
+For detailed deployment instructions, see [docs/infrastructure/README.md](docs/infrastructure/README.md).
 
 ## 📦 Tech Stack
 
-### Backend (Cloudflare Workers)
-- TypeScript
-- Hono (web framework)
-- jose (JWT verification)
-- Cloudflare KV (key-value storage)
-- Cloudflare D1 (SQLite database)
+### Backend (Azure Functions)
+- .NET 8 (isolated worker model)
+- Azure Table Storage
+- Microsoft.Identity.Web (JWT verification)
 
 ### Frontend
 - Vue 3.3.x
@@ -174,34 +124,16 @@ For detailed deployment instructions, see [docs/cloudflare/deployment.md](docs/c
 - @azure/msal-browser 3.6.0
 - Font Awesome 6.x
 
-## 🆓 Free Tier Limits
-
-| Service | Free Limit |
-|---------|------------|
-| Workers Requests | 100,000/day |
-| KV Reads | 100,000/day |
-| KV Writes | 1,000/day |
-| KV Storage | 1 GB |
-| D1 Rows Read | 5M/day |
-| D1 Rows Written | 100K/day |
-| D1 Storage | 5 GB |
-| Pages | Unlimited |
-
 ## 📖 Documentation
 
 Comprehensive documentation is available in the [docs/](docs/) folder:
 
 - **[docs/README.md](docs/README.md)** - Documentation index and navigation guide
-- **[docs/cloudflare/](docs/cloudflare/)** - Cloudflare deployment guides
 - **[docs/infrastructure/](docs/infrastructure/)** - Azure infrastructure documentation
 - **[docs/devcontainer.md](docs/devcontainer.md)** - Dev Container setup guide
 - **[docs/adr/](docs/adr/)** - Architecture Decision Records
 - **[docs/implementation/](docs/implementation/)** - Feature implementation details
 - **[docs/project-requirements.md](docs/project-requirements.md)** - Original project requirements
-
-## 🗂️ Legacy Azure Version
-
-The original Azure-based implementation (Azure Functions + Table Storage) is preserved in the `src/AkaMoney.Functions` and `src/AkaMoney.Services` directories for reference.
 
 ## 🤝 Contributing
 
@@ -213,4 +145,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📮 Contact
 
-Have any questions? Please open an [Issue](https://github.com/lettucebo/AkaMoney/issues).
+Have any questions? Please open an [Issue](https://github.com/lettucebo/AkaMoney-Azure/issues).
