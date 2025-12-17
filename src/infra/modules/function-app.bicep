@@ -1,4 +1,3 @@
-// filepath: c:\Users\tzyu\Source\Repos\AkaMoney\infra\modules\function-app.bicep
 /*
   Function App 模組 (FlexConsumption)
 */

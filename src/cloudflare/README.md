@@ -14,7 +14,7 @@ Short URL service built with Cloudflare Workers, KV, and D1.
 ### 1. Install dependencies
 
 ```bash
-cd cloudflare/worker
+cd src/cloudflare/worker
 npm install
 ```
 

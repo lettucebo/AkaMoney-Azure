@@ -51,7 +51,7 @@ wrangler whoami
 Navigate to the worker directory:
 
 ```bash
-cd cloudflare/worker
+cd src/cloudflare/worker
 ```
 
 ### 2.1 Create KV Namespace (for short URLs)
@@ -126,7 +126,7 @@ wrangler d1 list
 
 ## Step 3: Update wrangler.toml Configuration
 
-Edit `cloudflare/worker/wrangler.toml` with the IDs from the previous step:
+Edit `src/cloudflare/worker/wrangler.toml` with the IDs from the previous step:
 
 ```toml
 name = "akamoney-api"
@@ -302,7 +302,7 @@ First run will prompt to create a project - select **Create a new project**.
 
 ## Step 8: Configure CORS (if needed)
 
-If frontend and API are on different domains, edit `cloudflare/worker/src/index.ts` to update CORS origins:
+If frontend and API are on different domains, edit `src/cloudflare/worker/src/index.ts` to update CORS origins:
 
 ```typescript
 app.use('*', cors({
@@ -317,7 +317,7 @@ app.use('*', cors({
 
 Then redeploy:
 ```bash
-cd cloudflare/worker
+cd src/cloudflare/worker
 npm run deploy
 ```
 
@@ -446,7 +446,7 @@ wrangler tail
 ### Update Workers API
 
 ```bash
-cd cloudflare/worker
+cd src/cloudflare/worker
 npm run deploy
 ```
 
@@ -463,7 +463,7 @@ wrangler pages deploy dist --project-name=akamoney-frontend
 
 ### Update D1 Schema
 
-1. Create new migration file in `cloudflare/migrations/`
+1. Create new migration file in `src/cloudflare/migrations/`
 2. Run migration:
    ```bash
    wrangler d1 execute akamoney-clicks --file=../migrations/000X_new_migration.sql
@@ -492,7 +492,7 @@ Limits reset at UTC 00:00 daily.
 
 ```bash
 # Deploy Workers
-cd cloudflare/worker && npm run deploy
+cd src/cloudflare/worker && npm run deploy
 
 # Deploy Pages
 cd src/akamoney-frontend && npm run build && wrangler pages deploy dist --project-name=akamoney-frontend

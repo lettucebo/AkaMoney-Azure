@@ -40,14 +40,14 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: cloudflare/worker/package-lock.json
+          cache-dependency-path: src/cloudflare/worker/package-lock.json
 
       - name: Install dependencies
-        working-directory: cloudflare/worker
+        working-directory: src/cloudflare/worker
         run: npm ci
 
       - name: Run TypeScript check
-        working-directory: cloudflare/worker
+        working-directory: src/cloudflare/worker
         run: npx tsc --noEmit
 
       - name: Deploy to Cloudflare Workers
@@ -55,7 +55,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: cloudflare/worker
+          workingDirectory: src/cloudflare/worker
           command: deploy
           secrets: |
             AZURE_TENANT_ID
@@ -123,7 +123,7 @@ jobs:
         run: npm install -g wrangler
 
       - name: Run D1 migrations
-        working-directory: cloudflare/worker
+        working-directory: src/cloudflare/worker
         run: |
           for migration in ../migrations/*.sql; do
             echo "Running migration: $migration"
