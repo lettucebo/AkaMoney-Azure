@@ -1,4 +1,4 @@
-# AkaMoney Cloudflare 部署指南
+# AkaMoney Cloudflare Deployment
 
 此文件提供完整的 Cloudflare 部署說明，包含 Workers API 和 Pages 前端的部署步驟。
 
