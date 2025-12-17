@@ -11,10 +11,7 @@ Welcome to the AkaMoney documentation! This folder contains all project document
 - **[devcontainer.md](devcontainer.md)** - Dev Container setup for consistent development environment
 
 ### Deployment & Infrastructure
-- **[cloudflare/](cloudflare/)** - Cloudflare Workers, KV, D1, and Pages deployment
-  - [README.md](cloudflare/README.md) - Cloudflare API architecture and endpoints
-  - [deployment.md](cloudflare/deployment.md) - Complete Cloudflare deployment guide
-- **[infrastructure/](infrastructure/)** - Azure infrastructure (legacy/alternative deployment)
+- **[infrastructure/](infrastructure/)** - Azure infrastructure deployment
   - [README.md](infrastructure/README.md) - Azure Bicep deployment and Service Principal setup
 
 ### Architecture Decision Records (ADR)
@@ -32,8 +29,7 @@ Welcome to the AkaMoney documentation! This folder contains all project document
 ### Getting Started
 1. Read the main [README.md](../README.md) for project overview
 2. Check [devcontainer.md](devcontainer.md) for setting up your development environment
-3. For Cloudflare deployment, see [cloudflare/deployment.md](cloudflare/deployment.md)
-4. For Azure deployment, see [infrastructure/README.md](infrastructure/README.md)
+3. For Azure deployment, see [infrastructure/README.md](infrastructure/README.md)
 
 ### For Contributors
 - Review [ADR](adr/) documents to understand architectural decisions
@@ -43,7 +39,7 @@ Welcome to the AkaMoney documentation! This folder contains all project document
 ## 📝 Adding New Documentation
 
 When adding new documentation:
-1. Place it in the appropriate subfolder (cloudflare/, infrastructure/, adr/, implementation/)
+1. Place it in the appropriate subfolder (infrastructure/, adr/, implementation/)
 2. Create a new folder if the topic doesn't fit existing categories
 3. Update this README.md with a link to the new document
 4. Use meaningful filenames with dates for time-sensitive content (e.g., YYYY-MM-DD-feature-name.md)
@@ -51,7 +47,7 @@ When adding new documentation:
 
 ## 🔗 External References
 
-- [Cloudflare Workers Documentation](https://developers.cloudflare.com/workers/)
+- [Azure Functions Documentation](https://docs.microsoft.com/azure/azure-functions/)
 - [Vue 3 Documentation](https://vuejs.org/)
 - [Azure Bicep Documentation](https://docs.microsoft.com/azure/azure-resource-manager/bicep/)
 - [Microsoft Entra ID Documentation](https://docs.microsoft.com/azure/active-directory/)
