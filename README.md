@@ -75,14 +75,14 @@ cd AkaMoney
 
 2. Install dependencies
 ```bash
-cd cloudflare/worker && npm install
-cd ../../src/akamoney-frontend && npm install
+cd src/cloudflare/worker && npm install
+cd ../akamoney-frontend && npm install
 ```
 
 3. Configure environment variables
 ```bash
 # Workers API
-cp cloudflare/worker/.dev.vars.example cloudflare/worker/.dev.vars
+cp src/cloudflare/worker/.dev.vars.example src/cloudflare/worker/.dev.vars
 # Edit .dev.vars with your Entra ID credentials
 
 # Frontend
@@ -92,19 +92,19 @@ cp src/akamoney-frontend/.env.example src/akamoney-frontend/.env.local
 
 4. Initialize D1 database
 ```bash
-cd cloudflare/worker
+cd src/cloudflare/worker
 npm run db:migrate
 ```
 
 5. Start development servers
 ```bash
 # Option 1: Use the startup script
-cd cloudflare
+cd src/cloudflare
 .\start-dev.ps1
 
 # Option 2: Start manually
 # Terminal 1: Workers API
-cd cloudflare/worker && npm run dev
+cd src/cloudflare/worker && npm run dev
 
 # Terminal 2: Frontend
 cd src/akamoney-frontend && npm run serve
@@ -119,7 +119,7 @@ cd src/akamoney-frontend && npm run serve
 ### 1. Create Cloudflare Resources
 
 ```bash
-cd cloudflare/worker
+cd src/cloudflare/worker
 
 # Create KV namespace
 wrangler kv:namespace create SHORTURL_KV
@@ -131,7 +131,7 @@ wrangler d1 create akamoney-clicks
 
 ### 2. Update Configuration
 
-Edit `cloudflare/worker/wrangler.toml` with the resource IDs from step 1.
+Edit `src/cloudflare/worker/wrangler.toml` with the resource IDs from step 1.
 
 ### 3. Set Secrets
 
@@ -144,7 +144,7 @@ wrangler secret put AZURE_CLIENT_ID
 
 ```bash
 # Deploy Workers API
-cd cloudflare/worker
+cd src/cloudflare/worker
 npm run db:migrate:remote
 npm run deploy
 
@@ -153,7 +153,7 @@ cd src/akamoney-frontend
 npm run pages:deploy
 ```
 
-For detailed deployment instructions, see [cloudflare/README.md](cloudflare/README.md).
+For detailed deployment instructions, see [src/cloudflare/README.md](src/cloudflare/README.md).
 
 ## 📦 Tech Stack
 

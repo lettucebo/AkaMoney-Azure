@@ -12,7 +12,7 @@ npm install -g wrangler
 wrangler login
 
 # 2. Create resources (first time only)
-cd cloudflare/worker
+cd src/cloudflare/worker
 wrangler kv namespace create SHORTURL_KV
 wrangler d1 create akamoney-clicks
 
@@ -33,7 +33,7 @@ npm run deploy
 
 ```bash
 # Deploy Workers
-cd cloudflare/worker && npm run deploy
+cd src/cloudflare/worker && npm run deploy
 
 # Deploy Pages
 cd src/akamoney-frontend && npm run build && wrangler pages deploy dist --project-name=akamoney-frontend

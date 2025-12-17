@@ -15,7 +15,7 @@ This repository includes a VS Code Dev Container for a consistent local setup.
 3. After the container builds, tools are available globally. Use the usual scripts, for example:
    - `cd src/AkaMoney.Functions && func start --port 7071`
    - `cd src/akamoney-frontend && npm install && npm run serve`
-   - `cd cloudflare/worker && npm install && npm run dev`
+   - `cd src/cloudflare/worker && npm install && npm run dev`
 4. Storage emulator: Azurite runs automatically. To stop it, kill the `azurite` process inside the container.
 
 ## Notes
