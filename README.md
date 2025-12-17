@@ -153,7 +153,7 @@ cd src/akamoney-frontend
 npm run pages:deploy
 ```
 
-For detailed deployment instructions, see [src/cloudflare/README.md](src/cloudflare/README.md).
+For detailed deployment instructions, see [docs/cloudflare/deployment.md](docs/cloudflare/deployment.md).
 
 ## 📦 Tech Stack
 
@@ -184,6 +184,18 @@ For detailed deployment instructions, see [src/cloudflare/README.md](src/cloudfl
 | D1 Rows Written | 100K/day |
 | D1 Storage | 5 GB |
 | Pages | Unlimited |
+
+## 📖 Documentation
+
+Comprehensive documentation is available in the [docs/](docs/) folder:
+
+- **[docs/README.md](docs/README.md)** - Documentation index and navigation guide
+- **[docs/cloudflare/](docs/cloudflare/)** - Cloudflare deployment guides
+- **[docs/infrastructure/](docs/infrastructure/)** - Azure infrastructure documentation
+- **[docs/devcontainer.md](docs/devcontainer.md)** - Dev Container setup guide
+- **[docs/adr/](docs/adr/)** - Architecture Decision Records
+- **[docs/implementation/](docs/implementation/)** - Feature implementation details
+- **[docs/project-requirements.md](docs/project-requirements.md)** - Original project requirements
 
 ## 🗂️ Legacy Azure Version
 
