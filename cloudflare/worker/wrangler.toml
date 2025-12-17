@@ -14,14 +14,14 @@ AZURE_CLIENT_ID = ""
 # KV Namespace for short URLs
 [[kv_namespaces]]
 binding = "SHORTURL_KV"
-id = "PENDING_KV_ID"  # Replace after creating namespace: wrangler kv:namespace create SHORTURL_KV
-preview_id = "PENDING_KV_PREVIEW_ID"  # Replace after creating preview namespace: wrangler kv:namespace create SHORTURL_KV --preview
+id = "0de8694fdd794c1893c3f709ecf722d9"
+preview_id = "118ec6fab2cc4cdfa648fadf68d22cfa"
 
 # D1 Database for click tracking
 [[d1_databases]]
 binding = "CLICKS_DB"
 database_name = "akamoney-clicks"
-database_id = "PENDING_D1_ID"  # Replace after creating database: wrangler d1 create akamoney-clicks
+database_id = "131d3b75-59f5-41f2-863b-c5743c248349"
 
 [dev]
 port = 8787
