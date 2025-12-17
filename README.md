@@ -1,5 +1,7 @@
 # AkaMoney 🔗
 
+*English | [繁體中文](README.zh-TW.md)*
+
 AkaMoney is a high-performance short URL service built on **Cloudflare's edge network**. Features Microsoft Entra ID authentication for secure management.
 
 ## 🌐 Architecture
