@@ -1,7 +1,5 @@
 # AkaMoney Cloudflare 部署指南
 
-> **📝 Note**: This document is also available in the main documentation folder at [docs/cloudflare/deployment.md](../../docs/cloudflare/deployment.md)
-
 完整的生產環境部署步驟說明。
 
 ## Prerequisites

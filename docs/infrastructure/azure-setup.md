@@ -1,7 +1,5 @@
 # AkaMoney Infrastructure Documentation
 
-> **📝 Note**: This document is also available in the main documentation folder at [docs/infrastructure/azure-setup.md](../../docs/infrastructure/azure-setup.md)
-
 This directory contains Azure Infrastructure as Code (IaC) files for the AkaMoney project, using Azure Bicep for resource deployment.
 
 ## Directory Structure

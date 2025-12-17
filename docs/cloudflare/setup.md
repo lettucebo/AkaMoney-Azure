@@ -1,7 +1,5 @@
 # AkaMoney Cloudflare Workers API
 
-> **📝 Note**: This document is also available in the main documentation folder at [docs/cloudflare/setup.md](../../docs/cloudflare/setup.md)
-
 Short URL service built with Cloudflare Workers, KV, and D1.
 
 ## Prerequisites
@@ -52,7 +50,7 @@ The API will be available at `http://localhost:8787`.
 
 ## Production Deployment
 
-For complete deployment instructions, see **[docs/cloudflare/deployment.md](../../docs/cloudflare/deployment.md)**.
+For complete deployment instructions, see **[DEPLOYMENT.md](DEPLOYMENT.md)**.
 
 Quick deploy:
 ```bash

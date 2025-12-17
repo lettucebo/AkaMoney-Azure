@@ -153,7 +153,7 @@ cd src/akamoney-frontend
 npm run pages:deploy
 ```
 
-For detailed deployment instructions, see [src/cloudflare/README.md](src/cloudflare/README.md).
+For detailed deployment instructions, see [docs/cloudflare/deployment.md](docs/cloudflare/deployment.md).
 
 ## 📦 Tech Stack
 
@@ -188,6 +188,24 @@ For detailed deployment instructions, see [src/cloudflare/README.md](src/cloudfl
 ## 🗂️ Legacy Azure Version
 
 The original Azure-based implementation (Azure Functions + Table Storage) is preserved in the `src/AkaMoney.Functions` and `src/AkaMoney.Services` directories for reference.
+
+## 📖 Documentation
+
+Comprehensive documentation is available in the [docs](docs/) folder:
+
+- **[Documentation Index](docs/README.md)** - Complete documentation overview
+- **Getting Started**
+  - [Dev Container Setup](docs/devcontainer.md)
+  - [Cloudflare Setup Guide](docs/cloudflare/setup.md)
+- **Deployment**
+  - [Cloudflare Deployment Guide](docs/cloudflare/deployment.md)
+  - [Azure Infrastructure Setup](docs/infrastructure/azure-setup.md)
+- **Architecture & Design**
+  - [Architecture Decision Records (ADRs)](docs/adr/)
+  - [Implementation Plans](docs/implementation/)
+- **Project Info**
+  - [Project Requirements](docs/project-requirements.md)
+  - [Changelog](CHANGELOG.md)
 
 ## 🤝 Contributing
 
